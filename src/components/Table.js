@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {GlobalContext, GlobalStateProvider} from '../services/Global';
 
 const Table = () => {
   const data = [
@@ -8,6 +9,12 @@ const Table = () => {
     {id: 3, name: 'Bob', rank: 3, bananas: 2, isSearchedUser: false},
     {id: 4, name: 'Alice', rank: 4, bananas: 1, isSearchedUser: false},
   ];
+
+  const {userData, setuserData} = useContext(GlobalContext)
+
+  console.log('=================userDatauserData===================');
+  console.log(userData);
+  console.log('====================================');
 
   return (
     <View style={styles.container}>

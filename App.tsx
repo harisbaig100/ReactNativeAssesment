@@ -10,6 +10,7 @@ import {SafeAreaView, StatusBar, useColorScheme, View} from 'react-native';
 
 import UserSearchInput from './src/components/UserSearchInput';
 import Table from './src/components/Table';
+import {GlobalContext, GlobalStateProvider} from './src/services/Global';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -20,11 +21,17 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={'light-content'}
       />
-      <View
-        style={{marginTop: 50, justifyContent: 'center', alignItems: 'center'}}>
-        <UserSearchInput />
-        <Table />
-      </View>
+      <GlobalStateProvider>
+        <View
+          style={{
+            marginTop: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <UserSearchInput />
+          <Table />
+        </View>
+      </GlobalStateProvider>
     </SafeAreaView>
   );
 }

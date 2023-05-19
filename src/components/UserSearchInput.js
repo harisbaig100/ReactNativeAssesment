@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   TextInput,
@@ -7,10 +7,12 @@ import {
   Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {GlobalContext, GlobalStateProvider} from '../services/Global';
 
 const UserSearchInput = () => {
   const [userName, setUserName] = useState('');
-
+  const {userData, setuserData} = useContext(GlobalContext)
+  
   const handleSearch = () => {
     // Perform search logic using the entered user name
     console.log('Searching for user:', userName);
