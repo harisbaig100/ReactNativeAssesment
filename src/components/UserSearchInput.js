@@ -5,17 +5,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {GlobalContext, GlobalStateProvider} from '../services/Global';
 
 const UserSearchInput = () => {
-  const [userName, setUserName] = useState('');
-  const {userData, setuserData} = useContext(GlobalContext)
-  
+  const [name, setName] = useState('');
+  const {userName, setUserName} = useContext(GlobalContext);
+
   const handleSearch = () => {
-    // Perform search logic using the entered user name
-    console.log('Searching for user:', userName);
+    if (name.trim() === '') {
+      Alert.alert('Validation Error', 'Please enter a valid user name');
+    } else {
+      setUserName(name);
+    }
   };
 
   return (
@@ -28,8 +32,8 @@ const UserSearchInput = () => {
       />
       <TextInput
         placeholder="Enter user name"
-        value={userName}
-        onChangeText={text => setUserName(text)}
+        value={name}
+        onChangeText={text => setName(text)}
         style={styles.input}
       />
       <TouchableOpacity style={styles.button} onPress={handleSearch}>

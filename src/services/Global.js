@@ -3,13 +3,16 @@ const GlobalContext = createContext();
 
 const GlobalStateProvider = props => {
   const {children} = props;
-  const [userData, setuserData] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   return (
     <GlobalContext.Provider
       value={{
         userData,
-        setuserData,
+        setUserData,
+        userName,
+        setUserName,
       }}>
       {children}
     </GlobalContext.Provider>
