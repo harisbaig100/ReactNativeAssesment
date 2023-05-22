@@ -6,11 +6,17 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StatusBar, useColorScheme, View} from 'react-native';
+import {
+  SafeAreaView,
+  StatusBar,
+  useColorScheme,
+  View,
+  StyleSheet,
+} from 'react-native';
 
 import UserSearchInput from './src/components/UserSearchInput';
 import Table from './src/components/Table';
-import {GlobalContext, GlobalStateProvider} from './src/services/Global';
+import {GlobalStateProvider} from './src/services/Global';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -22,12 +28,7 @@ function App(): JSX.Element {
         backgroundColor={'light-content'}
       />
       <GlobalStateProvider>
-        <View
-          style={{
-            marginTop: 50,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.mainContainer}>
           <UserSearchInput />
           <Table />
         </View>
@@ -35,5 +36,13 @@ function App(): JSX.Element {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    marginTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default App;

@@ -10,53 +10,60 @@ const Table = () => {
   const compareUsersByBananas = (a, b) => b.bananas - a.bananas;
 
   useEffect(() => {
-    if (userName) {
-      const searchName = userName.trim();
-      const searchedUser = Object.values(JsonData).find(
-        user => user.name === searchName,
-      );
-
-      if (!searchedUser) {
-        Alert.alert(
-          'Error',
-          'This user name does not exist! Please specify an existing user name!',
-        );
-        return;
-      }
-
-      const users = Object.values(JsonData).sort(compareUsersByBananas);
-      const searchedUserIndex = users.findIndex(
-        user => user.uid === searchedUser.uid,
-      );
-
-      if (searchedUserIndex < 0) {
-        Alert.alert(
-          'Error',
-          'This user name does not exist! Please specify an existing user name!',
-        );
-        return;
-      }
-
-      const userTemp = users.slice(0, 10);
-      let rankTemp = 1;
-
-      const mappedData = userTemp.map(u => ({
-        ...u,
-        rank: rankTemp++,
-        isSearchedUser: false,
-      }));
-
-      if (searchedUserIndex >= 10) {
-        mappedData[9] = {
-          ...users[searchedUserIndex],
-          rank: searchedUserIndex + 1,
-          isSearchedUser: true,
-        };
-      }
-
-      setUserData(mappedData.slice(0, 10));
+    // type checking at very first line in call stack
+    if (userName && typeof userName === 'string') {
+      filterUsers();
     }
   }, [userName]);
+
+  const filterUsers = () => {
+    const searchName = userName.trim();
+    const searchedUser = Object.values(JsonData).find(
+      user => user.name === searchName,
+    );
+
+    if (!searchedUser) {
+      setUserName('')
+      Alert.alert(
+        'Error',
+        'This user name does not exist! Please specify an existing user name!',
+      );
+      return;
+    }
+
+    const users = Object.values(JsonData).sort(compareUsersByBananas);
+    const searchedUserIndex = users.findIndex(
+      user => user.uid === searchedUser.uid,
+    );
+
+    if (searchedUserIndex < 0) {
+      setUserName('')
+      Alert.alert(
+        'Error',
+        'This user name does not exist! Please specify an existing user name!',
+      );
+      return;
+    }
+
+    const userTemp = users.slice(0, 10);
+    let rankTemp = 1;
+
+    const mappedData = userTemp.map(u => ({
+      ...u,
+      rank: rankTemp++,
+      isSearchedUser: false,
+    }));
+
+    if (searchedUserIndex >= 10) {
+      mappedData[9] = {
+        ...users[searchedUserIndex],
+        rank: searchedUserIndex + 1,
+        isSearchedUser: true,
+      };
+    }
+
+    setUserData(mappedData.slice(0, 10));
+  };
 
   const renderItem = ({item}) => (
     <View style={styles.parentBoxStyles2}>
@@ -79,20 +86,31 @@ const Table = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.parentBoxStyles}>
-        <View style={styles.boxStyles}>
-          <Text style={styles.textStyles}>{'Name'}</Text>
+      {userName ? (
+        <View style={styles.parentBoxStyles}>
+          <View style={styles.boxStyles}>
+            <Text style={styles.textStyles}>{'Name'}</Text>
+          </View>
+          <View style={styles.boxStyles}>
+            <Text style={styles.textStyles}>{'Rank'}</Text>
+          </View>
+          <View style={styles.boxStyles}>
+            <Text style={styles.textStyles}>{'Number of bananas'}</Text>
+          </View>
+          <View style={styles.boxStyles}>
+            <Text style={styles.textStyles}>{'isSearchedUser?'}</Text>
+          </View>
         </View>
-        <View style={styles.boxStyles}>
-          <Text style={styles.textStyles}>{'Rank'}</Text>
+      ) : (
+        <View style={styles.parentBoxStyles}>
+          <View style={styles.boxStyles}>
+            <Text style={styles.textStyles}>
+              {'type a user name above to see the results'}
+            </Text>
+          </View>
         </View>
-        <View style={styles.boxStyles}>
-          <Text style={styles.textStyles}>{'Number of bananas'}</Text>
-        </View>
-        <View style={styles.boxStyles}>
-          <Text style={styles.textStyles}>{'isSearchedUser?'}</Text>
-        </View>
-      </View>
+      )}
+
       <FlatList
         data={userData}
         renderItem={renderItem}
@@ -107,7 +125,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 18,
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 60,
   },
   boxStyles: {
     flex: 1,
