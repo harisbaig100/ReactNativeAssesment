@@ -2,6 +2,8 @@ import React, {useContext, useEffect} from 'react';
 import {View, Text, StyleSheet, Alert, FlatList} from 'react-native';
 import {GlobalContext, GlobalStateProvider} from '../services/Global';
 import JsonData from './utils/leaderboard.json';
+import {filterUsers} from '../helperFunctions/filterUser';
+
 
 const Table = () => {
   const {userName, setUserName, userData, setUserData} =
@@ -12,58 +14,16 @@ const Table = () => {
   useEffect(() => {
     // type checking at very first line in call stack
     if (userName && typeof userName === 'string') {
-      filterUsers();
+      filterUsers(
+        userName,
+        JsonData,
+        setUserName,
+        Alert,
+        compareUsersByBananas,
+        setUserData,
+      );
     }
   }, [userName]);
-
-  const filterUsers = () => {
-    const searchName = userName.trim();
-    const searchedUser = Object.values(JsonData).find(
-      user => user.name === searchName,
-    );
-
-    if (!searchedUser) {
-      setUserName('')
-      Alert.alert(
-        'Error',
-        'This user name does not exist! Please specify an existing user name!',
-      );
-      return;
-    }
-
-    const users = Object.values(JsonData).sort(compareUsersByBananas);
-    const searchedUserIndex = users.findIndex(
-      user => user.uid === searchedUser.uid,
-    );
-
-    if (searchedUserIndex < 0) {
-      setUserName('')
-      Alert.alert(
-        'Error',
-        'This user name does not exist! Please specify an existing user name!',
-      );
-      return;
-    }
-
-    const userTemp = users.slice(0, 10);
-    let rankTemp = 1;
-
-    const mappedData = userTemp.map(u => ({
-      ...u,
-      rank: rankTemp++,
-      isSearchedUser: false,
-    }));
-
-    if (searchedUserIndex >= 10) {
-      mappedData[9] = {
-        ...users[searchedUserIndex],
-        rank: searchedUserIndex + 1,
-        isSearchedUser: true,
-      };
-    }
-
-    setUserData(mappedData.slice(0, 10));
-  };
 
   const renderItem = ({item}) => (
     <View style={styles.parentBoxStyles2}>
