@@ -35,8 +35,12 @@ const UserSearchInput = () => {
         value={name}
         onChangeText={text => setName(text)}
         style={styles.input}
+        autoFocus={true}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSearch}>
+      <TouchableOpacity
+        style={[styles.button, name.length === 0 && styles.disabledButton]}
+        disabled={name.length === 0}
+        onPress={handleSearch}>
         <Text style={styles.buttonText}>Search</Text>
       </TouchableOpacity>
     </View>
@@ -70,6 +74,9 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     left: 30,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
   },
 });
 
