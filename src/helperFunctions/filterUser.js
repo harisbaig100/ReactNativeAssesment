@@ -38,7 +38,7 @@ export const filterUsers = (userName, JsonData, setUserName, setUserData) => {
   const mappedData = userTemp.map(u => ({
     ...u,
     rank: rankTemp++,
-    isSearchedUser: u.rank === searchedUserIndex,
+    isSearchedUser: rankTemp - 2 === searchedUserIndex,
   }));
 
   if (searchedUserIndex >= 10) {
