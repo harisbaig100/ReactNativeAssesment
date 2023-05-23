@@ -18,16 +18,38 @@ const Table = () => {
   const renderItem = ({item}) => (
     <View style={styles.parentBoxStyles2}>
       <View style={styles.boxStyles2}>
-        <Text style={styles.textStyles}>{item.name}</Text>
+        <Text
+          style={[
+            styles.textStyles,
+            {color: item.isSearchedUser ? 'red' : 'black'},
+          ]}>
+          {item.name}
+        </Text>
       </View>
       <View style={styles.boxStyles2}>
-        <Text style={styles.textStyles}>{item.rank}</Text>
+        <Text
+          style={[
+            styles.textStyles,
+            {color: item.isSearchedUser ? 'red' : 'black'},
+          ]}>
+          {item.rank}
+        </Text>
       </View>
       <View style={styles.boxStyles2}>
-        <Text style={styles.textStyles}>{item.bananas}</Text>
+        <Text
+          style={[
+            styles.textStyles,
+            {color: item.isSearchedUser ? 'red' : 'black'},
+          ]}>
+          {item.bananas}
+        </Text>
       </View>
       <View style={styles.boxStyles2}>
-        <Text style={styles.textStyles}>
+        <Text
+          style={[
+            styles.textStyles,
+            {color: item.isSearchedUser ? 'red' : 'black'},
+          ]}>
           {item.isSearchedUser ? 'Yes' : 'No'}
         </Text>
       </View>

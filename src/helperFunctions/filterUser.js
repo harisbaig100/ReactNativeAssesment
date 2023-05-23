@@ -10,6 +10,7 @@ export const filterUsers = (userName, JsonData, setUserName, setUserData) => {
 
   if (!searchedUser) {
     setUserName('');
+    setUserData([]);
     Alert.alert(
       'Error',
       'This user name does not exist! Please specify an existing user name!',
@@ -24,6 +25,7 @@ export const filterUsers = (userName, JsonData, setUserName, setUserData) => {
 
   if (searchedUserIndex < 0) {
     setUserName('');
+    setUserData([]);
     Alert.alert(
       'Error',
       'This user name does not exist! Please specify an existing user name!',
@@ -33,11 +35,10 @@ export const filterUsers = (userName, JsonData, setUserName, setUserData) => {
 
   const userTemp = users.slice(0, 10);
   let rankTemp = 1;
-
   const mappedData = userTemp.map(u => ({
     ...u,
     rank: rankTemp++,
-    isSearchedUser: false,
+    isSearchedUser: u.rank === searchedUserIndex,
   }));
 
   if (searchedUserIndex >= 10) {
