@@ -1,73 +1,71 @@
-// Unit tests
-
+import {Alert} from 'react-native';
 import {filterUsers} from '../helperFunctions/filterUser';
 
+jest.mock('react-native', () => ({
+  Alert: {
+    alert: jest.fn(),
+  },
+}));
+
 describe('filterUsers', () => {
-  let setUserNameMock;
-  let setUserDataMock;
-  let alertMock;
-  let compareUsersByBananasMock;
-
   beforeEach(() => {
-    setUserNameMock = jest.fn();
-    setUserDataMock = jest.fn();
-    alertMock = jest.fn();
-    compareUsersByBananasMock = jest.fn();
+    Alert.alert.mockClear();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('should handle invalid user name and show error alert', () => {
-    // Arrange
-    const userName = 'InvalidUser';
-    const jsonData = {
-      // Your JSON data for testing
+  it('should handle non-existent user name', () => {
+    const setUserName = jest.fn();
+    const setUserData = jest.fn();
+    const JsonData = {
+      uid1: {name: 'John', bananas: 10},
+      uid2: {name: 'Alice', bananas: 5},
     };
+    const userName = '';
 
-    // Act
-    filterUsers(
-      userName,
-      jsonData,
-      setUserNameMock,
-      alertMock,
-      compareUsersByBananasMock,
-      setUserDataMock,
-    );
+    filterUsers(userName, JsonData, setUserName, setUserData);
 
-    // Assert
-    expect(setUserNameMock).toHaveBeenCalledWith('');
-    expect(alertMock).toHaveBeenCalledWith(
+    expect(setUserName).toHaveBeenCalledWith('');
+    expect(Alert.alert).toHaveBeenCalledWith(
       'Error',
       'This user name does not exist! Please specify an existing user name!',
     );
-    expect(setUserDataMock).not.toHaveBeenCalled();
+    expect(setUserData).not.toHaveBeenCalled();
   });
 
-  test('should handle valid user name and set user data', () => {
-    // Arrange
-    const userName = 'ValidUser';
+  it('should filter and set user data correctly', () => {
+    const setUserName = jest.fn();
+    const setUserData = jest.fn();
+    const JsonData = {
+      uid1: {name: 'John', bananas: 10},
+      uid2: {name: 'Alice', bananas: 5},
+    };
+    const userName = 'John';
+
+    filterUsers(userName, JsonData, setUserName, setUserData);
+
+    expect(setUserData).toHaveBeenCalledWith([
+      {name: 'John', bananas: 10, rank: 1, isSearchedUser: false},
+      {name: 'Alice', bananas: 5, rank: 2, isSearchedUser: false},
+    ]);
+    expect(Alert.alert).not.toHaveBeenCalled();
+  });
+
+  it('should filter and set user data correctly if the searched user index is less than 10', () => {
+    const setUserName = jest.fn();
+    const setUserData = jest.fn();
+    const userName = 'John';
     const jsonData = {
-      // Your JSON data for testing
+      1: {name: 'John', bananas: 5, uid: 1},
+      2: {name: 'Alice', bananas: 3, uid: 2},
+      3: {name: 'Bob', bananas: 7, uid: 3},
     };
 
-    // Act
-    filterUsers(
-      userName,
-      jsonData,
-      setUserNameMock,
-      alertMock,
-      compareUsersByBananasMock,
-      setUserDataMock,
-    );
+    filterUsers(userName, jsonData, setUserName, setUserData);
 
-    // Assert
-    expect(setUserNameMock).toHaveBeenCalledWith('');
-    expect(alertMock).not.toHaveBeenCalled();
-    // Add your assertions for setting user data
-    expect(setUserDataMock).toHaveBeenCalled();
+    expect(setUserData).toHaveBeenCalledWith([
+      {name: 'Bob', bananas: 7, uid: 3, rank: 1, isSearchedUser: false},
+      {name: 'John', bananas: 5, uid: 1, rank: 2, isSearchedUser: false},
+      {name: 'Alice', bananas: 3, uid: 2, rank: 3, isSearchedUser: false},
+    ]);
+    expect(Alert.alert).not.toHaveBeenCalled();
   });
-
-  // Add more test cases as needed
 });

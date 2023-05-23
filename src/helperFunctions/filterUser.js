@@ -1,11 +1,8 @@
-export const filterUsers = (
-  userName,
-  JsonData,
-  setUserName,
-  Alert,
-  compareUsersByBananas,
-  setUserData,
-) => {
+import {Alert} from 'react-native';
+
+const compareUsersByBananas = (a, b) => b.bananas - a.bananas;
+
+export const filterUsers = (userName, JsonData, setUserName, setUserData) => {
   const searchName = userName.trim();
   const searchedUser = Object.values(JsonData).find(
     user => user.name === searchName,

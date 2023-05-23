@@ -4,24 +4,14 @@ import {GlobalContext, GlobalStateProvider} from '../services/Global';
 import JsonData from './utils/leaderboard.json';
 import {filterUsers} from '../helperFunctions/filterUser';
 
-
 const Table = () => {
   const {userName, setUserName, userData, setUserData} =
     useContext(GlobalContext);
 
-  const compareUsersByBananas = (a, b) => b.bananas - a.bananas;
-
   useEffect(() => {
     // type checking at very first line in call stack
     if (userName && typeof userName === 'string') {
-      filterUsers(
-        userName,
-        JsonData,
-        setUserName,
-        Alert,
-        compareUsersByBananas,
-        setUserData,
-      );
+      filterUsers(userName, JsonData, setUserName, setUserData);
     }
   }, [userName]);
 
